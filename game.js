@@ -216,11 +216,6 @@ class Game {
         // Legs
         this.ctx.fillRect(x + pixelSize * 2, y + pixelSize * 7, pixelSize, pixelSize);
         this.ctx.fillRect(x + pixelSize * 5, y + pixelSize * 7, pixelSize, pixelSize);
-        
-        // Eyes
-        this.ctx.fillStyle = '#000';
-        this.ctx.fillRect(x + pixelSize * 3, y + pixelSize * 2, pixelSize, pixelSize);
-        this.ctx.fillRect(x + pixelSize * 4, y + pixelSize * 2, pixelSize, pixelSize);
     }
     
     draw() {
