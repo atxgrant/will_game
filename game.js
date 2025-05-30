@@ -21,6 +21,21 @@ class Game {
             gravity: 0.6,
             velocityY: 0
         };
+
+        // Chaser properties
+        this.chaser = {
+            x: 0,  // Will be set relative to player
+            y: this.canvas.height - 60,
+            width: 40,
+            height: 40,
+            jumping: false,
+            jumpForce: 12,
+            gravity: 0.6,
+            velocityY: 0,
+            jumpTimer: 0,
+            jumpInterval: 2000, // Time between random jumps (ms)
+            distance: 30  // Distance behind player
+        };
         
         // Obstacle properties
         this.obstacles = [];
@@ -59,8 +74,39 @@ class Game {
         this.player.y = this.canvas.height - 60;
         this.player.velocityY = 0;
         this.player.jumping = false;
+        this.chaser.y = this.canvas.height - 60;
+        this.chaser.velocityY = 0;
+        this.chaser.jumping = false;
         document.getElementById('gameOver').classList.add('hidden');
         this.animate(0);
+    }
+    
+    updateChaser(deltaTime) {
+        // Update chaser position to follow player
+        this.chaser.x = this.player.x - this.chaser.distance;
+
+        // Random jumping behavior
+        this.chaser.jumpTimer += deltaTime;
+        if (this.chaser.jumpTimer > this.chaser.jumpInterval) {
+            if (!this.chaser.jumping) {
+                this.chaser.jumping = true;
+                this.chaser.velocityY = -this.chaser.jumpForce;
+            }
+            this.chaser.jumpTimer = 0;
+        }
+
+        // Update chaser physics
+        if (this.chaser.jumping) {
+            this.chaser.velocityY += this.chaser.gravity;
+            this.chaser.y += this.chaser.velocityY;
+            
+            // Check ground collision
+            if (this.chaser.y > this.canvas.height - 60) {
+                this.chaser.y = this.canvas.height - 60;
+                this.chaser.jumping = false;
+                this.chaser.velocityY = 0;
+            }
+        }
     }
     
     update(deltaTime) {
@@ -82,6 +128,9 @@ class Game {
                 this.player.velocityY = 0;
             }
         }
+
+        // Update chaser
+        this.updateChaser(deltaTime);
         
         // Update obstacles
         this.obstacleTimer += deltaTime;
@@ -107,6 +156,9 @@ class Game {
             // Check collision
             if (this.checkCollision(this.player, this.obstacles[i])) {
                 this.gameOver = true;
+                // Move chaser to player position when game over
+                this.chaser.x = this.player.x;
+                this.chaser.y = this.player.y;
                 document.getElementById('gameOver').classList.remove('hidden');
                 cancelAnimationFrame(this.animationId);
             }
@@ -131,6 +183,10 @@ class Game {
         // Draw player
         this.ctx.fillStyle = '#00f';
         this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
+        
+        // Draw chaser
+        this.ctx.fillStyle = '#f0f';
+        this.ctx.fillRect(this.chaser.x, this.chaser.y, this.chaser.width, this.chaser.height);
         
         // Draw obstacles
         this.ctx.fillStyle = '#f00';
