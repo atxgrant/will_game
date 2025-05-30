@@ -217,6 +217,38 @@ class Game {
         this.ctx.fillRect(x + pixelSize * 2, y + pixelSize * 7, pixelSize, pixelSize);
         this.ctx.fillRect(x + pixelSize * 5, y + pixelSize * 7, pixelSize, pixelSize);
     }
+
+    drawPixelatedMonster(x, y, width, height, color) {
+        const pixelSize = width / 8; // Divide monster into 8x8 grid
+        
+        // Body (slightly larger than the person)
+        this.ctx.fillStyle = color;
+        this.ctx.fillRect(x + pixelSize * 2, y + pixelSize * 2, pixelSize * 4, pixelSize * 4);
+        
+        // Spiky head
+        this.ctx.fillRect(x + pixelSize * 2, y, pixelSize * 4, pixelSize * 2);
+        // Spikes on top
+        this.ctx.fillRect(x + pixelSize * 1, y, pixelSize, pixelSize);
+        this.ctx.fillRect(x + pixelSize * 3, y - pixelSize, pixelSize, pixelSize);
+        this.ctx.fillRect(x + pixelSize * 5, y, pixelSize, pixelSize);
+        
+        // Sharp teeth
+        this.ctx.fillStyle = '#fff';
+        this.ctx.fillRect(x + pixelSize * 2, y + pixelSize * 2, pixelSize, pixelSize);
+        this.ctx.fillRect(x + pixelSize * 5, y + pixelSize * 2, pixelSize, pixelSize);
+        
+        // Arms with claws
+        this.ctx.fillStyle = color;
+        this.ctx.fillRect(x + pixelSize, y + pixelSize * 3, pixelSize * 2, pixelSize * 2);
+        this.ctx.fillRect(x + pixelSize * 5, y + pixelSize * 3, pixelSize * 2, pixelSize * 2);
+        // Claws
+        this.ctx.fillRect(x, y + pixelSize * 3, pixelSize, pixelSize);
+        this.ctx.fillRect(x + pixelSize * 7, y + pixelSize * 3, pixelSize, pixelSize);
+        
+        // Legs
+        this.ctx.fillRect(x + pixelSize * 2, y + pixelSize * 6, pixelSize, pixelSize * 2);
+        this.ctx.fillRect(x + pixelSize * 5, y + pixelSize * 6, pixelSize, pixelSize * 2);
+    }
     
     draw() {
         // Clear canvas
@@ -229,9 +261,8 @@ class Game {
         // Draw player as pixelated person
         this.drawPixelatedPerson(this.player.x, this.player.y, this.player.width, this.player.height, '#00f');
         
-        // Draw chaser
-        this.ctx.fillStyle = '#f0f';
-        this.ctx.fillRect(this.chaser.x, this.chaser.y, this.chaser.width, this.chaser.height);
+        // Draw chaser as pixelated monster
+        this.drawPixelatedMonster(this.chaser.x, this.chaser.y, this.chaser.width, this.chaser.height, '#f0f');
         
         // Draw obstacles
         this.ctx.fillStyle = '#f00';
