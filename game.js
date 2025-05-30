@@ -144,32 +144,34 @@ class Game {
             this.obstacleTimer = 0;
         }
         
-        // Move obstacles
+        // Move obstacles and check for player collision
         for (let i = this.obstacles.length - 1; i >= 0; i--) {
             this.obstacles[i].x -= 5;
             
             // Remove off-screen obstacles
             if (this.obstacles[i].x + this.obstacles[i].width < 0) {
                 this.obstacles.splice(i, 1);
+                continue;
             }
             
-            // Check collision only with player
-            if (this.checkCollision(this.player, this.obstacles[i])) {
+            // Only check for collision with player
+            if (this.checkPlayerCollision(this.obstacles[i])) {
                 this.gameOver = true;
                 // Move chaser to player position when game over
                 this.chaser.x = this.player.x;
                 this.chaser.y = this.player.y;
                 document.getElementById('gameOver').classList.remove('hidden');
                 cancelAnimationFrame(this.animationId);
+                return;
             }
         }
     }
     
-    checkCollision(player, obstacle) {
-        return player.x < obstacle.x + obstacle.width &&
-               player.x + player.width > obstacle.x &&
-               player.y < obstacle.y + obstacle.height &&
-               player.y + player.height > obstacle.y;
+    checkPlayerCollision(obstacle) {
+        return this.player.x < obstacle.x + obstacle.width &&
+               this.player.x + this.player.width > obstacle.x &&
+               this.player.y < obstacle.y + obstacle.height &&
+               this.player.y + this.player.height > obstacle.y;
     }
     
     draw() {
