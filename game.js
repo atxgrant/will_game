@@ -54,6 +54,10 @@ class Game {
         // Event listeners
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
         
+        // Add touch event listeners for mobile
+        this.canvas.addEventListener('touchstart', this.handleTouch.bind(this));
+        document.addEventListener('touchstart', this.handleTouch.bind(this));
+        
         // Start game loop
         this.lastTime = 0;
         this.animate(0);
@@ -61,12 +65,22 @@ class Game {
     
     handleKeyDown(event) {
         if (event.code === 'Space') {
-            if (this.gameOver) {
-                this.reset();
-            } else if (!this.player.jumping) {
-                this.player.jumping = true;
-                this.player.velocityY = -this.player.jumpForce;
-            }
+            this.handleJump();
+        }
+    }
+
+    handleTouch(event) {
+        // Prevent default touch behavior (like scrolling)
+        event.preventDefault();
+        this.handleJump();
+    }
+
+    handleJump() {
+        if (this.gameOver) {
+            this.reset();
+        } else if (!this.player.jumping) {
+            this.player.jumping = true;
+            this.player.velocityY = -this.player.jumpForce;
         }
     }
     
