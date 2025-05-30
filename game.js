@@ -34,7 +34,10 @@ class Game {
             velocityY: 0,
             jumpTimer: 0,
             jumpInterval: 2000, // Time between random jumps (ms)
-            distance: 60  // Distance behind player
+            baseDistance: 67.5, // Average distance (middle point between 80 and 55)
+            distanceRange: 12.5, // Half the range (80 - 55) / 2
+            distanceTimer: 0,
+            distanceSpeed: 0.001 // Speed of distance oscillation
         };
         
         // Obstacle properties
@@ -77,13 +80,21 @@ class Game {
         this.chaser.y = this.canvas.height - 60;
         this.chaser.velocityY = 0;
         this.chaser.jumping = false;
+        this.chaser.distanceTimer = 0;
         document.getElementById('gameOver').classList.add('hidden');
         this.animate(0);
     }
     
     updateChaser(deltaTime) {
-        // Update chaser position to follow player
-        this.chaser.x = this.player.x - this.chaser.distance;
+        // Update distance timer
+        this.chaser.distanceTimer += deltaTime * this.chaser.distanceSpeed;
+        
+        // Calculate current distance using sine wave
+        const currentDistance = this.chaser.baseDistance + 
+            Math.sin(this.chaser.distanceTimer) * this.chaser.distanceRange;
+        
+        // Update chaser position to follow player with dynamic distance
+        this.chaser.x = this.player.x - currentDistance;
 
         // Random jumping behavior
         this.chaser.jumpTimer += deltaTime;
