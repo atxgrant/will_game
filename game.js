@@ -199,6 +199,30 @@ class Game {
                this.player.y + this.player.height > obstacle.y;
     }
     
+    drawPixelatedPerson(x, y, width, height, color) {
+        const pixelSize = width / 8; // Divide character into 8x8 grid
+        
+        // Head
+        this.ctx.fillStyle = color;
+        this.ctx.fillRect(x + pixelSize * 2, y, pixelSize * 4, pixelSize * 4);
+        
+        // Body
+        this.ctx.fillRect(x + pixelSize * 3, y + pixelSize * 4, pixelSize * 2, pixelSize * 3);
+        
+        // Arms
+        this.ctx.fillRect(x + pixelSize, y + pixelSize * 4, pixelSize * 2, pixelSize);
+        this.ctx.fillRect(x + pixelSize * 5, y + pixelSize * 4, pixelSize * 2, pixelSize);
+        
+        // Legs
+        this.ctx.fillRect(x + pixelSize * 2, y + pixelSize * 7, pixelSize, pixelSize);
+        this.ctx.fillRect(x + pixelSize * 5, y + pixelSize * 7, pixelSize, pixelSize);
+        
+        // Eyes
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(x + pixelSize * 3, y + pixelSize * 2, pixelSize, pixelSize);
+        this.ctx.fillRect(x + pixelSize * 4, y + pixelSize * 2, pixelSize, pixelSize);
+    }
+    
     draw() {
         // Clear canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -207,9 +231,8 @@ class Game {
         this.ctx.fillStyle = '#333';
         this.ctx.fillRect(0, this.ground.y, this.canvas.width, this.ground.height);
         
-        // Draw player
-        this.ctx.fillStyle = '#00f';
-        this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
+        // Draw player as pixelated person
+        this.drawPixelatedPerson(this.player.x, this.player.y, this.player.width, this.player.height, '#00f');
         
         // Draw chaser
         this.ctx.fillStyle = '#f0f';
