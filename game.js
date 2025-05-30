@@ -34,7 +34,7 @@ class Game {
             velocityY: 0,
             jumpTimer: 0,
             jumpInterval: 2000, // Time between random jumps (ms)
-            distance: 100  // Distance behind player
+            distance: 60  // Distance behind player
         };
         
         // Obstacle properties
