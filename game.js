@@ -153,7 +153,7 @@ class Game {
                 this.obstacles.splice(i, 1);
             }
             
-            // Check collision
+            // Check collision only with player
             if (this.checkCollision(this.player, this.obstacles[i])) {
                 this.gameOver = true;
                 // Move chaser to player position when game over
